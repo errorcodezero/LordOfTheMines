@@ -1,2 +1,2 @@
 # LordOfTheMines
-Terminal based mining game for fun
+⛏Terminal based mining game for fun
