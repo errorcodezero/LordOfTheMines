@@ -1,11 +1,10 @@
 from random import uniform, choice, randint
-from variables import ores
-import json
-import rich
+from variables import ores, oreIndexes
 from rich import print
 from os.path import exists
 
 ores = ores.ores
+oreIndexes = oreIndexes.oreIndexes
 
 obtainableOres = []
 
@@ -23,22 +22,21 @@ def pickOre():
         Picks an ore
         # TODO add more ores
     """
-    i = 0
+
     for ore in ores:
-        if ore["chance"] >= chance:
+        if ores[ore]["chance"] >= chance:
             obtainableOres.append(ore)
         
     if obtainableOres == []:
         return print("[red]You got nothing :( [/red]")
     recieved_ore = choice(obtainableOres)
-    userInventory[recieved_ore["name"]] = userInventory[recieved_ore["name"]] + 1
-    print(f"""You got a {recieved_ore["name"]}""")
+    userInventory[recieved_ore] = userInventory[recieved_ore] + 1
+    print(f"""You got a {recieved_ore}""")
 
 
 def sellOre():
     """
         Sell a certain amount of ores
-        # TODO make it so it sells more than 1 ore
     """
     print("[magenta]What ore would you like to sell?[/magenta]")
     print("[green]Inventory:[/green]")
@@ -55,7 +53,25 @@ def sellOre():
         return print(f"[red]{userInput} is not a valid ore[/red]")
 
     if userInventory[userInput.lower()] == 0:
-        return print(f"""[red]You don't enough {ore[userinput]}[/red]""")
+        return print(f"""[red]You don't enough {userInput.lower()} to sell[/red]""")
+
+    ore_to_sell = userInput.lower()
+
+    print(f"[magenta]How many {ore_to_sell} would you like to sell?[/magenta]")
+    userInput = input()
+
+    try:
+        userInput = int(userInput)
+    except:
+        return print(f"[red]{userInput} is not a valid number[/red]")
+
+    if userInput > userInventory[ore_to_sell]:
+        return print(f"[red]You don't have enough {ore_to_sell} to sell[/red]")
+
+    userInventory[ore_to_sell] -= userInput
+    userInventory["coins"] += userInput * ores[ore_to_sell]["price"]
+
+    print(f"[green]You sold {userInput} {ore_to_sell}[/green]")
 
     for ore in userInventory:
         if userInput == ore.lower():
