@@ -13,7 +13,7 @@ jobs:
       uses: eric2788/pyinstaller-build@master
       with:
         main: main
-        artifact: Program
+        artifact: LordOfTheMines_Linux
         use-dependencies: true
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
@@ -29,7 +29,7 @@ jobs:
         uses: eric2788/pyinstaller-build@master
         with:
           main: main
-          artifact: Program
+          artifact: LordOfTheMines_Win
           use-dependencies: true
       - name: Upload Artifact
         uses: actions/upload-artifact@v2

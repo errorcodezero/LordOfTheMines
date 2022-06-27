@@ -119,7 +119,9 @@ def sell():
         console = Console()
         console.print(table)
 
-        print("[magenta]What ore would you like to sell?[/magenta]")
+        print(f"""Coins: {userInventory["coins"]}""")
+
+        print("[magenta]What ore would you like to sell?[/magenta](type exit to exit)")
 
         userInput = input()
 
@@ -134,6 +136,9 @@ def sell():
 
         if userInventory[userInput.lower()] == 0:
             return print(f"""[red]You don't enough {userInput.lower()} to sell[/red]""")
+
+        elif userInput.lower() == "coins":
+            return print(f"[red]You can't sell coins[/red]")
 
         ore_to_sell = userInput
 
@@ -153,8 +158,6 @@ def sell():
             return print(f"[red]You don't have enough {ore_to_sell} to sell[/red]")
         elif userInput < 0:
             return print(f"[red]You can't sell negative amounts of ore[/red]")
-        elif userInput.lower() == "coins":
-            return print(f"[red]You can't sell coins[/red]")
 
         userInventory[ore_to_sell] -= userInput
         userInventory["coins"] += userInput * ores[ore_to_sell]["price"]
@@ -182,10 +185,17 @@ def inventory():
             table.add_row(f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
             if userInventory[ore] < 0:
                 userInventory[ore] = 0
+        console = Console()
+        console.log(table)
+        print(f"""Coins: {userInventory["coins"]}""")
+        print("Press enter to exit")
+        input()
+        return main_menu()
 
 
 def shop():
-    pass
+    print("This command is not added yet")
+    return main_menu()
 
 
 while True:
