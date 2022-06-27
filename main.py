@@ -28,11 +28,11 @@ userInventory = {
     "coins": 0
 }
 
+
 def main_menu():
     splash_screen = text2art("LordOfTheMines")
 
     print(splash_screen)
-
 
     print("[green]What would you like to do?[/green]")
     print("[green]1. Mine[/green]")
@@ -111,10 +111,11 @@ def sell():
         for ore in ores:
             if ore == "coin":
                 break
-            table.add_row(f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+            table.add_row(
+                f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
             if userInventory[ore] < 0:
                 userInventory[ore] = 0
-                
+
         console = Console()
         console.print(table)
 
@@ -167,11 +168,23 @@ def sell():
                 print(f"[orange] You sold {1} {ore}! [orange]")
 
 
-def shop():
-    pass
-
-
 def inventory():
+    while True:
+        table = Table(title="Inventory")
+
+        table.add_column("Ore", justify="right", style="green", no_wrap=True)
+        table.add_column("Price", justify="right", style="blue")
+        table.add_column("Amount", justify="right", style="magenta")
+
+        for ore in ores:
+            if ore == "coin":
+                break
+            table.add_row(f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+            if userInventory[ore] < 0:
+                userInventory[ore] = 0
+
+
+def shop():
     pass
 
 
