@@ -54,15 +54,17 @@ def mine():
         inputToType = randint(1, 100)
         print(f"Type the number {inputToType}(or type exit to exit)")
         userInput = input()
+        recieved_ore = []
         if userInput == str(inputToType):
             for ore in ores:
                 if ores[ore]["chance"] >= chance:
                     obtainableOres.append(ore)
-
-            if obtainableOres == []:
-                print("[red]You got nothing :( [/red]")
-            recieved_ore = choice(obtainableOres)
-            userInventory[recieved_ore] = userInventory[recieved_ore] + 1
+            try:
+                recieved_ore = choice(obtainableOres)
+            except:
+                print("[red]You didn't recieve any ore[/red]")
+                return mine()
+            userInventory[recieved_ore] += 1
             print(f"""You got a {recieved_ore}""")
         elif userInput == "exit":
             return main_menu()
