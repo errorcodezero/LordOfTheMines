@@ -1,22 +1,39 @@
 from random import uniform, choice, randint
 from variables import ores
 from rich import print
+from rich.highlighter import Highlighter
 from os.path import exists
+from art import *
+from rich.console import Console
+from rich.table import Table
 
 ores = ores.ores
+
+console = Console()
+
+console.clear()
 
 obtainableOres = []
 
 userInventory = {
     "stone": 0,
+    "coal": 0,
     "copper": 0,
+    "amethyst": 0,
+    "iron": 0,
+    "silver": 0,
+    "gold": 0,
+    "diamond": 0,
+    "platinum": 0,
     "coins": 0
 }
 
-print("Welcome to mining simulator ⛏")
-
-
 def main_menu():
+    splash_screen = text2art("LordOfTheMines")
+
+    print(splash_screen)
+
+
     print("[green]What would you like to do?[/green]")
     print("[green]1. Mine[/green]")
     print("[green]2. Sell[/green]")
@@ -24,17 +41,22 @@ def main_menu():
     print("[green]4. Inventory[/green]")
     print("[green]5. Exit[/green]")
     userInput = input()
+    console = Console()
     if userInput == "1":
         while True:
+            console.clear()
             return mine()
     elif userInput == "2":
         while True:
+            console.clear()
             return sell()
     elif userInput == "3":
         while True:
+            console.clear()
             return shop()
     elif userInput == "4":
         while True:
+            console.clear()
             return inventory()
     elif userInput == "5":
         print("[red]Goodbye![/red]")
@@ -66,7 +88,10 @@ def mine():
                 return mine()
             userInventory[recieved_ore] += 1
             print(f"""You got a {recieved_ore}""")
+            console = Console()
         elif userInput == "exit":
+            console = Console()
+            console.clear()
             return main_menu()
         else:
             print(f"You were supposed to type {inputToType}")
@@ -77,18 +102,30 @@ def sell():
         Sell a certain amount of ores
     """
     while True:
-        print("[magenta]What ore would you like to sell?[/magenta]")
-        print("[green]Inventory:[/green]")
-        for ore in userInventory:
-            print(f"""{ore}: {userInventory[ore]}""")
+        table = Table(title="Inventory")
+
+        table.add_column("Ore", justify="right", style="green", no_wrap=True)
+        table.add_column("Price", justify="right", style="blue")
+        table.add_column("Amount", justify="right", style="magenta")
+
+        for ore in ores:
+            if ore == "coin":
+                break
+            table.add_row(f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
             if userInventory[ore] < 0:
                 userInventory[ore] = 0
+                
+        console = Console()
+        console.print(table)
 
-        print("\n")
+        print("[magenta]What ore would you like to sell?[/magenta]")
 
         userInput = input()
 
+        console = Console()
+
         if(userInput == "exit"):
+            console.clear()
             return main_menu()
 
         if userInput.lower() not in userInventory.keys():
@@ -97,7 +134,7 @@ def sell():
         if userInventory[userInput.lower()] == 0:
             return print(f"""[red]You don't enough {userInput.lower()} to sell[/red]""")
 
-        ore_to_sell = userInput.lower()
+        ore_to_sell = userInput
 
         print(
             f"[magenta]How many {ore_to_sell} would you like to sell?[/magenta]")
