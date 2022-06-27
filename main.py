@@ -4,7 +4,6 @@ from rich import print
 from os.path import exists
 
 ores = ores.ores
-oreIndexes = oreIndexes.oreIndexes
 
 obtainableOres = []
 
