@@ -1,8 +1,6 @@
 from random import uniform, choice, randint
 from variables import ores
 from rich import print
-from rich.highlighter import Highlighter
-from os.path import exists
 from art import *
 from rich.console import Console
 from rich.table import Table
@@ -60,7 +58,7 @@ def main_menu():
             return inventory()
     elif userInput == "5":
         print("[red]Goodbye![/red]")
-        exit()
+        quit(1)
     else:
         print("[red]Invalid input[/red]")
         main_menu()
@@ -198,5 +196,9 @@ def shop():
     return main_menu()
 
 
-while True:
-    main_menu()
+try:
+    while True:
+        main_menu()
+except:
+    print("[red]Goodbye![/red]")
+    quit(1)
