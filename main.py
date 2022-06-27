@@ -1,5 +1,5 @@
 from random import uniform, choice, randint
-from variables import ores, oreIndexes
+from variables import ores
 from rich import print
 from os.path import exists
 
