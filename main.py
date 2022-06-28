@@ -193,6 +193,8 @@ def inventory():
 
 def shop():
     print("This command is not added yet")
+    print("Press enter to continue")
+    input()
     return main_menu()
 
 
@@ -201,4 +203,5 @@ try:
         main_menu()
 except:
     print("[red]Goodbye![/red]")
-    quit(1)
+    print(exit)
+    exit()
