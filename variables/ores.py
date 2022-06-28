@@ -27,7 +27,7 @@ ores = {
         "name": "iron",
         "price": 20,
         "chance": 0.5,
-        "type": "uncommon",
+        "type": "rare",
     },
     "silver": {
         "name": "silver",
@@ -39,6 +39,12 @@ ores = {
         "name": "gold",
         "price": 100,
         "chance": 0.3,
+        "type": "epic",
+    },
+    "emerald": {
+        "name": "emerald",
+        "price": 250,
+        "chance": 0.25,
         "type": "epic",
     },
     "diamond": {

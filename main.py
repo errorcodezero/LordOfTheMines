@@ -21,6 +21,7 @@ userInventory = {
     "iron": 0,
     "silver": 0,
     "gold": 0,
+    "emerald": 0,
     "diamond": 0,
     "platinum": 0,
     "coins": 0
@@ -37,7 +38,6 @@ def main_menu():
     print("[green]2. Sell[/green]")
     print("[green]3. Shop[/green]")
     print("[green]4. Inventory[/green]")
-    print("[green]5. Exit[/green]")
     userInput = input()
     console = Console()
     if userInput == "1":
@@ -56,9 +56,6 @@ def main_menu():
         while True:
             console.clear()
             return inventory()
-    elif userInput == "5":
-        print("[red]Goodbye![/red]")
-        quit(1)
     else:
         print("[red]Invalid input[/red]")
         main_menu()
@@ -198,10 +195,12 @@ def shop():
     return main_menu()
 
 
-try:
-    while True:
-        main_menu()
-except:
-    print("[red]Goodbye![/red]")
-    print(exit)
-    exit()
+if __name__ == "__main__":
+    try:
+        while True:
+            main_menu()
+  
+    except:
+        print("[red]Goodbye![/red]")
+        print(exit)
+        exit()
