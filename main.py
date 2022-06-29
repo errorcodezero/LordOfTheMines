@@ -116,14 +116,28 @@ def sell():
 
         print(f"""Coins: {userInventory["coins"]}""")
 
-        print("[magenta]What ore would you like to sell?[/magenta](type exit to exit)")
+        print("[magenta]What ore would you like to sell?[/magenta](type exit to exit and type sellall to sell everything)")
 
         userInput = input()
 
         console = Console()
 
-        if(userInput == "exit"):
+        if userInput == "exit":
             console.clear()
+            return main_menu()
+        
+        if userInput == "sellall":
+            console.clear()
+            for ore in userInventory:
+                if ore == "coins":
+                    pass
+                else:
+                    userInventory["coins"] += ores[ore]["price"] * userInventory[ore]
+                    userInventory[ore] = 0
+            print("[green]You sold all your ore[/green]")
+            print("Press enter to continue")
+            
+            input()
             return main_menu()
 
         if userInput.lower() not in userInventory.keys():
@@ -138,7 +152,7 @@ def sell():
         ore_to_sell = userInput
 
         print(
-            f"[magenta]How many {ore_to_sell} would you like to sell?[/magenta]")
+            f"[magenta]How many {ore_to_sell} would you like to sell(type exit to exit)?[/magenta]")
         userInput = input()
 
         if(userInput == "exit"):
@@ -195,12 +209,15 @@ def shop():
     return main_menu()
 
 
-if __name__ == "__main__":
-    try:
-        while True:
-            main_menu()
+# if __name__ == "__main__":
+#     try:
+#         while True:
+#             main_menu()
   
-    except:
-        print("[red]Goodbye![/red]")
-        print(exit)
-        exit()
+#     except:
+#         print("[red]Goodbye![/red]")
+#         print(exit)
+#         exit()
+
+while True:
+    main_menu()
