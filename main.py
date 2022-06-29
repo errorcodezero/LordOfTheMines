@@ -40,19 +40,19 @@ def main_menu():
     print("[green]4. Inventory[/green]")
     userInput = input()
     console = Console()
-    if userInput == "1":
+    if userInput == "1" or userInput.lower() == "mine":
         while True:
             console.clear()
             return mine()
-    elif userInput == "2":
+    elif userInput == "2" or userInput.lower() == "sell":
         while True:
             console.clear()
             return sell()
-    elif userInput == "3":
+    elif userInput == "3" or userInput.lower() == "shop":
         while True:
             console.clear()
             return shop()
-    elif userInput == "4":
+    elif userInput == "4" or userInput.lower() == "inventory":
         while True:
             console.clear()
             return inventory()
@@ -209,15 +209,12 @@ def shop():
     return main_menu()
 
 
-# if __name__ == "__main__":
-#     try:
-#         while True:
-#             main_menu()
+if __name__ == "__main__":
+    try:
+        while True:
+            main_menu()
   
-#     except:
-#         print("[red]Goodbye![/red]")
-#         print(exit)
-#         exit()
-
-while True:
-    main_menu()
+    except:
+        print("[red]Goodbye![/red]")
+        print(exit)
+        exit()
