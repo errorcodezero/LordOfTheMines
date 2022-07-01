@@ -14,8 +14,8 @@ console.clear()
 obtainableOres = []
 
 userInventory = {
-    "stone": 1,
-    "coal": 1,
+    "stone": 0,
+    "coal": 0,
     "copper": 0,
     "amethyst": 0,
     "iron": 0,
