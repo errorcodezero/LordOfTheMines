@@ -6,6 +6,7 @@ from rich.console import Console
 from rich.table import Table
 from pystyle import Colorate, Colors, Anime
 from animations.load_animation import load_animation
+import os
 
 ores = ores.ores
 
@@ -29,12 +30,17 @@ userInventory = {
     "coins": 0
 }
 
+def get_random_line(file_name):
+    line = choice(open(file_name).readlines())
+    return line
 
 def main_menu():
     splash_screen = text2art("LordOfTheMines")
     rgb_splash_screen = Colorate.Diagonal(Colors.blue_to_red, splash_screen)
 
     print(rgb_splash_screen)
+    splash_text = get_random_line("variables/splash.txt")
+    rprint(f"[white]{splash_text}[/white]")
 
     rprint("[green]What would you like to do?[/green]")
     rprint("[green]1. Mine[/green]")
