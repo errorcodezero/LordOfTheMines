@@ -103,13 +103,15 @@ def sell():
         table.add_column("Price", justify="right", style="blue")
         table.add_column("Amount", justify="right", style="magenta")
 
-        for ore in ores:
+        for ore in userInventory:
             if ore == "coin":
                 break
-            table.add_row(
-                f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
-            if userInventory[ore] < 0:
+            elif userInventory[ore] <= 0:
                 userInventory[ore] = 0
+                break
+            else:
+                table.add_row(
+                f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
 
         console = Console()
         console.print(table)
@@ -191,10 +193,11 @@ def inventory():
         for ore in ores:
             if ore == "coin":
                 break
-            table.add_row(f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
-            if userInventory[ore] < 0:
+            elif userInventory[ore] <= 0:
                 userInventory[ore] = 0
-        console = Console()
+                break
+            else:
+                table.add_row(f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
         console.log(table)
         print(f"""Coins: {userInventory["coins"]}""")
         print("Press enter to exit")
@@ -216,5 +219,4 @@ if __name__ == "__main__":
   
     except:
         print("[red]Goodbye![/red]")
-        print(exit)
         exit()
