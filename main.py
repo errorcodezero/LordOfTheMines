@@ -1,9 +1,10 @@
 from random import uniform, choice, randint
 from variables import ores
-from rich import print
+from rich import print as rprint
 from art import *
 from rich.console import Console
 from rich.table import Table
+from pystyle import Colorate, Colors
 
 ores = ores.ores
 
@@ -30,14 +31,15 @@ userInventory = {
 
 def main_menu():
     splash_screen = text2art("LordOfTheMines")
+    rgb_splash_screen = Colorate.Horizontal(Colors.rainbow, splash_screen)
 
-    print(splash_screen)
+    print(rgb_splash_screen)
 
-    print("[green]What would you like to do?[/green]")
-    print("[green]1. Mine[/green]")
-    print("[green]2. Sell[/green]")
-    print("[green]3. Shop[/green]")
-    print("[green]4. Inventory[/green]")
+    rprint("[green]What would you like to do?[/green]")
+    rprint("[green]1. Mine[/green]")
+    rprint("[green]2. Sell[/green]")
+    rprint("[green]3. Shop[/green]")
+    rprint("[green]4. Inventory[/green]")
     userInput = input()
     console = Console()
     if userInput == "1" or userInput.lower() == "mine":
@@ -57,7 +59,7 @@ def main_menu():
             console.clear()
             return inventory()
     else:
-        print("[red]Invalid input[/red]")
+        rprint("[red]Invalid input[/red]")
         main_menu()
 
 
@@ -69,7 +71,7 @@ def mine():
         """
         chance = round(uniform(0, 1), 2)
         inputToType = randint(1, 100)
-        print(f"Type the number {inputToType}(or type exit to exit)")
+        rprint(f"Type the number {inputToType}(or type exit to exit)")
         userInput = input()
         recieved_ore = []
         if userInput == str(inputToType):
@@ -79,7 +81,7 @@ def mine():
             try:
                 recieved_ore = choice(obtainableOres)
             except:
-                print("[red]You didn't recieve any ore[/red]")
+                rprint("[red]You didn't recieve any ore[/red]")
                 return mine()
             userInventory[recieved_ore] += 1
             print(f"""You got a {recieved_ore}""")
@@ -89,7 +91,7 @@ def mine():
             console.clear()
             return main_menu()
         else:
-            print(f"You were supposed to type {inputToType}")
+            rprint(f"You were supposed to type {inputToType}")
 
 
 def sell():
@@ -116,9 +118,9 @@ def sell():
         console = Console()
         console.print(table)
 
-        print(f"""Coins: {userInventory["coins"]}""")
+        rprint(f"""Coins: {userInventory["coins"]}""")
 
-        print("[magenta]What ore would you like to sell?[/magenta](type exit to exit and type sellall to sell everything)")
+        rprint("[magenta]What ore would you like to sell?[/magenta](type exit to exit and type sellall to sell everything)")
 
         userInput = input()
 
@@ -137,24 +139,24 @@ def sell():
                     userInventory["coins"] += ores[ore]["price"] * \
                         userInventory[ore]
                     userInventory[ore] = 0
-            print("[green]You sold all your ore[/green]")
-            print("Press enter to continue")
+            rprint("[green]You sold all your ore[/green]")
+            rprint("Press enter to continue")
 
             input()
             return main_menu()
 
         if userInput.lower() not in userInventory.keys():
-            return print(f"[red]{userInput} is not a valid ore[/red]")
+            return rprint(f"[red]{userInput} is not a valid ore[/red]")
 
         if userInventory[userInput.lower()] == 0:
-            return print(f"""[red]You don't enough {userInput.lower()} to sell[/red]""")
+            return rprint(f"""[red]You don't enough {userInput.lower()} to sell[/red]""")
 
         elif userInput.lower() == "coins":
-            return print(f"[red]You can't sell coins[/red]")
+            return rprint(f"[red]You can't sell coins[/red]")
 
         ore_to_sell = userInput
 
-        print(
+        rprint(
             f"[magenta]How many {ore_to_sell} would you like to sell(type exit to exit)?[/magenta]")
         userInput = input()
 
@@ -164,23 +166,23 @@ def sell():
         try:
             userInput = int(userInput)
         except:
-            return print(f"[red]{userInput} is not a valid number[/red]")
+            return rprint(f"[red]{userInput} is not a valid number[/red]")
 
         if userInput > userInventory[ore_to_sell]:
-            return print(f"[red]You don't have enough {ore_to_sell} to sell[/red]")
+            return rprint(f"[red]You don't have enough {ore_to_sell} to sell[/red]")
         elif userInput < 0:
-            return print(f"[red]You can't sell negative amounts of ore[/red]")
+            return rprint(f"[red]You can't sell negative amounts of ore[/red]")
 
         userInventory[ore_to_sell] -= userInput
         userInventory["coins"] += userInput * ores[ore_to_sell]["price"]
 
-        print(f"[green]You sold {userInput} {ore_to_sell}[/green]")
+        rprint(f"[green]You sold {userInput} {ore_to_sell}[/green]")
 
         for ore in userInventory:
             if userInput == ore.lower():
                 userInventory[ore] = userInventory[ore] - 1
                 userInventory["coins"] = userInventory["coins"] + 1
-                print(f"[orange] You sold {1} {ore}! [orange]")
+                rprint(f"[orange] You sold {1} {ore}! [orange]")
 
 
 def inventory():
@@ -201,15 +203,15 @@ def inventory():
                 table.add_row(
                     f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
         console.log(table)
-        print(f"""Coins: {userInventory["coins"]}""")
-        print("Press enter to exit")
+        rprint(f"""Coins: {userInventory["coins"]}""")
+        rprint("Press enter to exit")
         input()
         return main_menu()
 
 
 def shop():
-    print("This command is not added yet")
-    print("Press enter to continue")
+    rprint("This command is not added yet")
+    rprint("Press enter to continue")
     input()
     return main_menu()
 
