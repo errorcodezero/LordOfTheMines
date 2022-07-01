@@ -14,8 +14,8 @@ console.clear()
 obtainableOres = []
 
 userInventory = {
-    "stone": 0,
-    "coal": 0,
+    "stone": 1,
+    "coal": 1,
     "copper": 0,
     "amethyst": 0,
     "iron": 0,
@@ -104,14 +104,14 @@ def sell():
         table.add_column("Amount", justify="right", style="magenta")
 
         for ore in userInventory:
-            if ore == "coin":
-                break
+            if ore == "coins":
+                continue
             elif userInventory[ore] <= 0:
                 userInventory[ore] = 0
-                break
+                continue
             else:
                 table.add_row(
-                f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+                    f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
 
         console = Console()
         console.print(table)
@@ -127,18 +127,19 @@ def sell():
         if userInput == "exit":
             console.clear()
             return main_menu()
-        
+
         if userInput == "sellall":
             console.clear()
             for ore in userInventory:
                 if ore == "coins":
                     pass
                 else:
-                    userInventory["coins"] += ores[ore]["price"] * userInventory[ore]
+                    userInventory["coins"] += ores[ore]["price"] * \
+                        userInventory[ore]
                     userInventory[ore] = 0
             print("[green]You sold all your ore[/green]")
             print("Press enter to continue")
-            
+
             input()
             return main_menu()
 
@@ -197,7 +198,8 @@ def inventory():
                 userInventory[ore] = 0
                 break
             else:
-                table.add_row(f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+                table.add_row(
+                    f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
         console.log(table)
         print(f"""Coins: {userInventory["coins"]}""")
         print("Press enter to exit")
@@ -212,11 +214,13 @@ def shop():
     return main_menu()
 
 
-if __name__ == "__main__":
-    try:
-        while True:
-            main_menu()
-  
-    except:
-        print("[red]Goodbye![/red]")
-        exit()
+# if __name__ == "__main__":
+#     try:
+#         while True:
+#             main_menu()
+
+#     except:
+#         print("[red]Goodbye![/red]")
+#         exit()
+while True:
+    main_menu()
