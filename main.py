@@ -4,7 +4,8 @@ from rich import print as rprint
 from art import *
 from rich.console import Console
 from rich.table import Table
-from pystyle import Colorate, Colors
+from pystyle import Colorate, Colors, Anime
+from animations.load_animation import load_animation
 
 ores = ores.ores
 
@@ -31,7 +32,7 @@ userInventory = {
 
 def main_menu():
     splash_screen = text2art("LordOfTheMines")
-    rgb_splash_screen = Colorate.Horizontal(Colors.rainbow, splash_screen)
+    rgb_splash_screen = Colorate.Diagonal(Colors.blue_to_red, splash_screen)
 
     print(rgb_splash_screen)
 
@@ -222,5 +223,5 @@ if __name__ == "__main__":
             main_menu()
 
     except:
-        print("[red]Goodbye![/red]")
+        rprint("[red]Goodbye![/red]")
         exit()
