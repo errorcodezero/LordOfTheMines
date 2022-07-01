@@ -214,13 +214,11 @@ def shop():
     return main_menu()
 
 
-# if __name__ == "__main__":
-#     try:
-#         while True:
-#             main_menu()
+if __name__ == "__main__":
+    try:
+        while True:
+            main_menu()
 
-#     except:
-#         print("[red]Goodbye![/red]")
-#         exit()
-while True:
-    main_menu()
+    except:
+        print("[red]Goodbye![/red]")
+        exit()
