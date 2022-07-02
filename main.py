@@ -6,7 +6,7 @@ from rich.console import Console
 from rich.table import Table
 from pystyle import Colorate, Colors, Anime
 from animations.load_animation import load_animation
-import os
+import json
 
 ores = ores.ores
 
@@ -16,19 +16,7 @@ console.clear()
 
 obtainableOres = []
 
-userInventory = {
-    "stone": 0,
-    "coal": 0,
-    "copper": 0,
-    "amethyst": 0,
-    "iron": 0,
-    "silver": 0,
-    "gold": 0,
-    "emerald": 0,
-    "diamond": 0,
-    "platinum": 0,
-    "coins": 0
-}
+userInventory = {}
 
 def get_random_line(file_name):
     line = choice(open(file_name).readlines())
@@ -90,7 +78,10 @@ def mine():
             except:
                 rprint("[red]You didn't recieve any ore[/red]")
                 return mine()
-            userInventory[recieved_ore] += 1
+            try:
+                userInventory[recieved_ore] += 1
+            except:
+                userInventory[recieved_ore] = 1
             print(f"""You got a {recieved_ore}""")
             console = Console()
         elif userInput == "exit":
@@ -125,7 +116,11 @@ def sell():
         console = Console()
         console.print(table)
 
-        rprint(f"""Coins: {userInventory["coins"]}""")
+        try:
+            rprint(f"""Coins: {userInventory["coins"]}""")
+        except:
+            userInventory["coins"] = 0
+            rprint(f"""Coins: 0""")
 
         rprint("[magenta]What ore would you like to sell?[/magenta](type exit to exit and type sellall to sell everything)")
 
