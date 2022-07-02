@@ -7,6 +7,7 @@ from rich.table import Table
 from pystyle import Colorate, Colors
 from database import Database
 import sys
+from animations.load_animation import load_animation
 
 console = Console()
 console.clear()
@@ -228,14 +229,12 @@ def shop():
     return main_menu()
 
 
-# if __name__ == "__main__":
-#     try:
-#         while True:
-#             main_menu()
+if __name__ == "__main__":
+    try:
+        while True:
+            main_menu()
 
-#     except:
-#         rprint("[red]Goodbye![/red]")
-#         db.setdb(userInventory)
-#         sys.exit()
-while True:
-    main_menu()
+    except:
+        load_animation("Saving your data ")
+        db.setdb(userInventory)
+        sys.exit()
