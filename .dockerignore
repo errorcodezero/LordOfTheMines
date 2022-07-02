@@ -1,0 +1,7 @@
+.venv
+.vscode
+.github
+.replit
+.gitpod.yml
+.gitignore
+README.md
