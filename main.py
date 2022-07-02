@@ -1,5 +1,6 @@
 from random import uniform, choice, randint
 from variables.ores import ores
+from variables.shop import shopItems
 from rich import print as rprint
 from art import *
 from rich.console import Console
@@ -112,8 +113,11 @@ def sell():
                 userInventory[ore] = 0
                 continue
             else:
-                table.add_row(
-                    f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+                try:
+                    table.add_row(
+                        f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+                except:
+                    table.add_row(f"""{ore}""", f"""{shopItems[ore]["price"]}""", f"""{userInventory[ore]}""")
 
         console = Console()
         console.print(table)
@@ -204,8 +208,11 @@ def inventory():
                 userInventory[ore] = 0
                 continue
             else:
-                table.add_row(
-                    f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+                try:
+                    table.add_row(
+                        f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+                except:
+                    table.add_row(f"""{ore}""", f"""{shopItems[ore]["price"]}""", f"""{userInventory[ore]}""")
 
         console = Console()
         console.print(table)
@@ -217,17 +224,27 @@ def inventory():
         rprint("Press enter to continue")
         input()
         return main_menu()
-        rprint("Press enter to exit")
-        input()
-        return main_menu()
 
 
 def shop():
-    rprint("This command is not added yet")
-    rprint("Press enter to continue")
-    input()
-    return main_menu()
-
+    for item in shopItems:
+        print(item)
+    print("What would you like to buy")
+    userInput = input()
+    for item in shopItems:
+        if userInput.lower() == item.lower():
+            if userInventory["coins"] >= shopItems[item]["price"]:
+                userInventory["coins"] -= shopItems[item]["price"]
+                try:
+                    userInventory[item] += 1
+                except:
+                    userInventory[item] = 1
+                rprint(f"[green]You bought {item}![/green]")
+            else:
+                rprint(f"[red]You don't have enough coins to buy {item}[/red]")
+            return shop()
+    if userInput == "exit":
+        return main_menu()
 
 if __name__ == "__main__":
     try:
@@ -235,6 +252,6 @@ if __name__ == "__main__":
             main_menu()
 
     except:
-        load_animation("Saving your data ")
+        load_animation("Saving your data", 20)
         db.setdb(userInventory)
         sys.exit()

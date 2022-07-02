@@ -1,11 +1,10 @@
 import time
 import sys
-import os
 from rich.console import Console
 
 console = Console()
 
-def load_animation(load_str):
+def load_animation(load_str, load_time):
     # String for creating the rotating line
     animation = "|/-\\"
     anicount = 0
@@ -17,7 +16,7 @@ def load_animation(load_str):
     # pointer for travelling the loading string
     i = 0                     
   
-    while (counttime != 100):
+    while (counttime != load_time):
           
         # used to change the animation speed
         # smaller the value, faster will be the animation
@@ -27,8 +26,10 @@ def load_animation(load_str):
         # as string is immutable
               
         # displaying the resultant string
-        sys.stdout.write(f"\r" + load_str + animation[anicount])
+        sys.stdout.write(f"\r" + load_str + " " + animation[anicount])
         sys.stdout.flush()
           
         anicount = (anicount + 1)% 4
         counttime = counttime + 1
+    sys.stdout.write(f"\r" + load_str + " ✅")
+    sys.stdout.write("\n")
