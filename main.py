@@ -34,7 +34,7 @@ def main_menu():
     splash_text = get_random_line("variables/splash.txt")
     rprint(f"[white]{splash_text}[/white]")
 
-    rprint("[green]What would you like to do?[/green]")
+    rprint("[blue]What would you like to do?[/blue]")
     rprint("[green]1. Mine[/green]")
     rprint("[green]2. Sell[/green]")
     rprint("[green]3. Shop[/green]")
