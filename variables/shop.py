@@ -37,5 +37,15 @@ shopItems = {
             "silver": 100,
             "gold": 100,
         }
-    }
+    },
+    "gem crate": {
+        "name": "gem crate",
+        "price": 80000,
+        "description": "A crate that contains a pack of all the gems",
+        "contents": {
+            "amethyst": 100,
+            "emerald": 100,
+            "diamond": 100,
+        }
+    },
 }
