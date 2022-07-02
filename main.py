@@ -208,7 +208,14 @@ def inventory():
 
         console = Console()
         console.print(table)
-        rprint(f"""Coins: {userInventory["coins"]}""")
+        try:
+            rprint(f"""Coins: {userInventory["coins"]}""")
+        except:
+            userInventory["coins"] = 0
+            rprint(f"""Coins: 0""")
+        rprint("Press enter to continue")
+        input()
+        return main_menu()
         rprint("Press enter to exit")
         input()
         return main_menu()
@@ -221,12 +228,14 @@ def shop():
     return main_menu()
 
 
-if __name__ == "__main__":
-    try:
-        while True:
-            main_menu()
+# if __name__ == "__main__":
+#     try:
+#         while True:
+#             main_menu()
 
-    except:
-        rprint("[red]Goodbye![/red]")
-        db.setdb(userInventory)
-        sys.exit()
+#     except:
+#         rprint("[red]Goodbye![/red]")
+#         db.setdb(userInventory)
+#         sys.exit()
+while True:
+    main_menu()
