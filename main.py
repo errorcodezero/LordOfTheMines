@@ -39,6 +39,7 @@ def main_menu():
     rprint("[green]2. Sell[/green]")
     rprint("[green]3. Shop[/green]")
     rprint("[green]4. Inventory[/green]")
+    rprint("[green]5. Info[/green]")
     userInput = input()
     console = Console()
     if userInput == "1" or userInput.lower() == "mine":
@@ -57,6 +58,10 @@ def main_menu():
         while True:
             console.clear()
             return inventory()
+    elif userInput == "5" or userInput.lower == "info":
+        while True:
+            console.clear()
+            return info()
     else:
         rprint("[red]Invalid input[/red]")
         main_menu()
@@ -243,6 +248,11 @@ def shop():
             table.add_row(f"""{item}""", f"""Priceless""")
 
     console.log(table)
+    try:
+        rprint(f"Coins: {userInventory['coins']}")
+    except:
+        userInventory["coins"] = 0
+        rprint(f"Coins: 0")
     print("What would you like to buy(type exit to exit)")
     userInput = input()
     for item in shopItems:
@@ -262,12 +272,50 @@ def shop():
     if userInput.lower() == "exit":
         return main_menu()
 
+
+def info():
+    while True:
+        rprint("[green]What item would you like to see more about(type exit to exit)?([/green]")
+
+        userInput = input()
+        if userInput.lower() == "exit":
+            return main_menu()
+        try:
+            for item in shopItems:
+                if userInput.lower() == item.lower():
+                    rprint(f"""Name: [green bold]{item}[/green bold]""")
+                    rprint(
+                        f"""Description: [green]{shopItems[item]["description"]}[/green]""")
+                    rprint("Contents:")
+                    for contents in shopItems[item]["contents"]:
+                        if len(contents):
+                            break
+                        rprint(f"""- [green]{contents}[/green]""")
+                    rprint("[blue]Press enter to exit")
+                    input()
+                    return main_menu()
+
+            for ore in ores:
+                if userInput.lower() == ore.lower():
+                    rprint(f"""Name: [green bold]{ore}[/green bold]""")
+                    rprint(f"""Price: [green]{ores[ore]["price"]}[/green]""")
+                    rprint("[blue]Press enter to exit")
+                    input()
+                    return main_menu()
+                else: 
+                    rprint(f"[red]{userInput} is not a valid item[/red]")
+                    return info()
+        except:
+            rprint(f"[red]{userInput} is not a valid item[/red]")
+            return info()
+
+
 if __name__ == "__main__":
     try:
         while True:
             main_menu()
 
     except:
-        load_animation("Saving your data", 20)
+        load_animation("Saving your data", 10)
         db.setdb(userInventory)
         sys.exit()
