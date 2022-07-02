@@ -1,22 +1,22 @@
 from random import uniform, choice, randint
-from variables import ores
+from variables.ores import ores
 from rich import print as rprint
 from art import *
 from rich.console import Console
 from rich.table import Table
-from pystyle import Colorate, Colors, Anime
-from animations.load_animation import load_animation
-import json
-
-ores = ores.ores
+from pystyle import Colorate, Colors
+from database import Database
 
 console = Console()
-
 console.clear()
 
 obtainableOres = []
+db = Database("database.json")
+try:
+    userInventory = db.printdb()
+except:
+    userInventory = {}
 
-userInventory = {}
 
 def get_random_line(file_name):
     line = choice(open(file_name).readlines())
@@ -195,16 +195,18 @@ def inventory():
         table.add_column("Price", justify="right", style="blue")
         table.add_column("Amount", justify="right", style="magenta")
 
-        for ore in ores:
-            if ore == "coin":
-                break
+        for ore in userInventory:
+            if ore == "coins":
+                continue
             elif userInventory[ore] <= 0:
                 userInventory[ore] = 0
-                break
+                continue
             else:
                 table.add_row(
                     f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
-        console.log(table)
+
+        console = Console()
+        console.print(table)
         rprint(f"""Coins: {userInventory["coins"]}""")
         rprint("Press enter to exit")
         input()
@@ -225,4 +227,5 @@ if __name__ == "__main__":
 
     except:
         rprint("[red]Goodbye![/red]")
+        db.setdb(userInventory)
         exit()
