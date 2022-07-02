@@ -26,5 +26,16 @@ shopItems = {
             "amethyst": 100,
             "iron": 100,
         }
+    },
+    "metal crate": {
+        "name": "metal crate",
+        "price": 30000,
+        "description": "A crate that contains a pack of all the metals",
+        "contents": {
+            "copper": 100,
+            "iron": 100,
+            "silver": 100,
+            "gold": 100,
+        }
     }
 }
