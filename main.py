@@ -238,7 +238,7 @@ def shop():
     for item in shopItems:
         try:
             table.add_row(
-                f"""{item}""", f"""{shopItems[item]["price"]}""")
+                f"""{item.title()}""", f"""{shopItems[item]["price"]}""")
         except:
             table.add_row(f"""{item}""", f"""Priceless""")
 
@@ -250,9 +250,11 @@ def shop():
             if userInventory["coins"] >= shopItems[item]["price"]:
                 userInventory["coins"] -= shopItems[item]["price"]
                 try:
-                    userInventory[item] += 1
+                    for contents in shopItems[item]["contents"]:
+                        userInventory[contents] += shopItems[item]["contents"][item]
                 except:
-                    userInventory[item] = 1
+                    for contents in shopItems[item]["contents"]:
+                        userInventory[contents] = shopItems[item]["contents"][contents]
                 rprint(f"[green]You bought {item}![/green]")
             else:
                 rprint(f"[red]You don't have enough coins to buy {item}[/red]")

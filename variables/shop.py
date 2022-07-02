@@ -14,5 +14,17 @@ shopItems = {
         "contents": {
             "collectors coin": 1
         }
+    },
+    "starter crate": {
+        "name": "starter crate",
+        "price": 5000,
+        "description": "A crate that contains a starter pack of ores.",
+        "contents": {
+            "stone": 100,
+            "coal": 100,
+            "copper": 100,
+            "amethyst": 100,
+            "iron": 100,
+        }
     }
 }
