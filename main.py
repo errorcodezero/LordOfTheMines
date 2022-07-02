@@ -25,6 +25,7 @@ def get_random_line(file_name):
     line = choice(open(file_name).readlines())
     return line
 
+
 def main_menu():
     splash_screen = text2art("LordOfTheMines")
     rgb_splash_screen = Colorate.Diagonal(Colors.blue_to_red, splash_screen)
@@ -117,7 +118,8 @@ def sell():
                     table.add_row(
                         f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
                 except:
-                    table.add_row(f"""{ore}""", f"""{shopItems[ore]["price"]}""", f"""{userInventory[ore]}""")
+                    table.add_row(
+                        f"""{ore}""", f"""{shopItems[ore]["price"]}""", f"""{userInventory[ore]}""")
 
         console = Console()
         console.print(table)
@@ -212,7 +214,8 @@ def inventory():
                     table.add_row(
                         f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
                 except:
-                    table.add_row(f"""{ore}""", f"""{shopItems[ore]["price"]}""", f"""{userInventory[ore]}""")
+                    table.add_row(
+                        f"""{ore}""", f"""{shopItems[ore]["price"]}""", f"""{userInventory[ore]}""")
 
         console = Console()
         console.print(table)
@@ -227,9 +230,20 @@ def inventory():
 
 
 def shop():
+    table = Table(title="Shop")
+
+    table.add_column("Item", justify="right", style="green", no_wrap=True)
+    table.add_column("Price", justify="right", style="blue")
+
     for item in shopItems:
-        print(item)
-    print("What would you like to buy")
+        try:
+            table.add_row(
+                f"""{item}""", f"""{shopItems[item]["price"]}""")
+        except:
+            table.add_row(f"""{item}""", f"""Priceless""")
+
+    console.log(table)
+    print("What would you like to buy(type exit to exit)")
     userInput = input()
     for item in shopItems:
         if userInput.lower() == item.lower():
@@ -243,7 +257,7 @@ def shop():
             else:
                 rprint(f"[red]You don't have enough coins to buy {item}[/red]")
             return shop()
-    if userInput == "exit":
+    if userInput.lower() == "exit":
         return main_menu()
 
 if __name__ == "__main__":

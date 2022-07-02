@@ -6,5 +6,13 @@ shopItems = {
         "contents": {
             "lucky totem": 1
         },
+    },
+    "collectors coin": {
+        "name": "collectors coin",
+        "price": 1000000,
+        "description": "A coin that is for only the richest. No real use but nice.",
+        "contents": {
+            "collectors coin": 1
+        }
     }
 }
