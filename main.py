@@ -149,7 +149,9 @@ def sell():
             console.clear()
             for ore in userInventory:
                 if ore == "coins":
-                    pass
+                    continue
+                elif ore in shopItems:
+                    continue
                 else:
                     userInventory["coins"] += ores[ore]["price"] * \
                         userInventory[ore]
