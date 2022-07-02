@@ -6,6 +6,7 @@ from rich.console import Console
 from rich.table import Table
 from pystyle import Colorate, Colors
 from database import Database
+import sys
 
 console = Console()
 console.clear()
@@ -228,4 +229,4 @@ if __name__ == "__main__":
     except:
         rprint("[red]Goodbye![/red]")
         db.setdb(userInventory)
-        exit()
+        sys.exit()
