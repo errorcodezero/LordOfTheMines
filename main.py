@@ -91,6 +91,10 @@ def mine():
                 userInventory[recieved_ore] += 1
             except:
                 userInventory[recieved_ore] = 1
+            if ores[recieved_ore]["type"] == "legendary":
+                msg = Colorate.DiagonalBackwards(Colors.rainbow, f"You found some {recieved_ore}!")
+                print(msg)
+                return mine()
             print(f"""You got a {recieved_ore}""")
             console = Console()
         elif userInput == "exit":
