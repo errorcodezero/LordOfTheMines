@@ -51,7 +51,6 @@ def main_menu():
     rprint("[green]3. Shop[/green]")
     rprint("[green]4. Inventory[/green]")
     rprint("[green]5. Info[/green]")
-    rprint("[green]6. Manual Save[/green]")
     userInput = input()
     console = Console()
     # Mine
@@ -79,16 +78,6 @@ def main_menu():
         while True:
             console.clear()
             return info()
-    # Manual Save
-    elif userInput == "6" or userInput.lower() == "manual save" or userInput.lower() == "save":
-        while True:
-            console.clear()
-            load_animation("Saving your data", 10)
-            db.setdb(userInventory)
-            rprint("Press enter to exit")
-            input()
-            console.clear()
-            return main_menu()
     # Invalid input
     else:
         rprint("[red]Invalid input[/red]")
