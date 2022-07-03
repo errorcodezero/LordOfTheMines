@@ -116,21 +116,6 @@ def mine():
                 userInventory[recieved_ore] += 1
             except:
                 userInventory[recieved_ore] = 1
-            # If user gets a legendary ore
-            if ores[recieved_ore]["type"] == "legendary":
-                msg = Colorate.DiagonalBackwards(Colors.rainbow, f"You found some {recieved_ore}!")
-                print(msg)
-                return mine()
-            # If user gets a normal ore 
-            if userInventory["lucky totem"] >= 1 and randint(1, 3) == 1:
-                rprint(f"[yellow]You got 2 {recieved_ore} because of your lucky totem![/yellow]")
-                if randint(0, 25) == 0:
-                    rprint("[red]You got unlucky and your lucky totem popped![/red]")
-                    try:
-                        userInventory["lucky totem"] -= 1
-                    except:
-                        userInventory["lucky totem"] = 0
-                return mine()
             print(f"""You got a {recieved_ore}""")
         # Exit
         elif userInput == "exit":
