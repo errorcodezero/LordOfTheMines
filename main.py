@@ -26,11 +26,15 @@ except:
     userInventory = {}
 
 # Function to get random splash text
+
+
 def get_random_line(file_name):
     line = choice(open(file_name).readlines())
     return line
 
 # Main menu
+
+
 def main_menu():
     # Splash Screen
     splash_screen = text2art("LordOfTheMines")
@@ -51,6 +55,7 @@ def main_menu():
     rprint("[green]3. Shop[/green]")
     rprint("[green]4. Inventory[/green]")
     rprint("[green]5. Info[/green]")
+    rprint("[green]6. Craft[/green]")
     userInput = input()
     console = Console()
     # Mine
@@ -78,6 +83,11 @@ def main_menu():
         while True:
             console.clear()
             return info()
+    # Craft
+    elif userInput == "6" or userInput.lower() == "craft":
+        while True:
+            console.clear()
+            return craft()
     # Invalid input
     else:
         rprint("[red]Invalid input[/red]")
@@ -118,10 +128,12 @@ def mine():
                 userInventory[recieved_ore] = 1
 
             if ores[recieved_ore]["type"] == "legendary":
-                text = Colorate.Diagonal(Colors.rainbow, f"""You got a {recieved_ore}""", speed = randint(1, 3))
+                text = Colorate.Diagonal(
+                    Colors.rainbow, f"""You got a {recieved_ore}""", speed=randint(1, 3))
                 print(text)
             elif "lucky totem" in userInventory and randint(1, 4) == 1:
-                rprint(f"[yellow]Your lucky totem made you lucky and you got 2 {recieved_ore}[/yellow]")
+                rprint(
+                    f"[yellow]Your lucky totem made you lucky and you got 2 {recieved_ore}[/yellow]")
                 try:
                     userInventory[recieved_ore] += 1
                 except:
@@ -135,6 +147,7 @@ def mine():
         # If user doesn't type specified number
         else:
             rprint(f"You were supposed to type {inputToType}")
+
 
 def sell():
     """
@@ -232,7 +245,7 @@ def sell():
         # If they don't have enough of an ore to sell
         if userInput > userInventory[ore_to_sell]:
             return rprint(f"[red]You don't have enough {ore_to_sell} to sell[/red]")
-        
+
         # To prevent them from selling negative amounts
         elif userInput < 0:
             return rprint(f"[red]You can't sell negative amounts of ore[/red]")
@@ -250,6 +263,8 @@ def sell():
                 rprint(f"[orange] You sold {1} {ore}! [orange]")
 
 # Inventory
+
+
 def inventory():
     while True:
         # Inventory table
@@ -314,7 +329,7 @@ def shop():
         rprint(f"Coins: {userInventory['coins']}")
     except:
         userInventory["coins"] = 0
-        rprint(f"Coins: 0") 
+        rprint(f"Coins: 0")
 
     # Asks what to buy
     print("What would you like to buy(type exit to exit)")
@@ -338,10 +353,13 @@ def shop():
         return main_menu()
 
 # Info
+
+
 def info():
     while True:
         # Asks user what they would like to see info about
-        rprint("[green]What item would you like to see more about(type exit to exit)?([/green]")
+        rprint(
+            "[green]What item would you like to see more about(type exit to exit)?([/green]")
 
         userInput = input()
         if userInput.lower() == "exit":
@@ -368,12 +386,42 @@ def info():
                     rprint("[blue]Press enter to exit")
                     input()
                     return main_menu()
-                else: 
+                else:
                     rprint(f"[red]{userInput} is not a valid item[/red]")
                     return info()
         except:
             rprint(f"[red]{userInput} is not a valid item[/red]")
             return info()
+
+
+def craft():
+    """
+    Purpose: 
+    """
+    print("What would you like to craft(type exit to exit)?")
+    userInput = input()
+    for item in shopItems:
+        if userInput.lower() == item.lower():
+            for ores in shopItems[item]["recipe"]:
+                try:
+                    if userInventory[ores] < shopItems[item]["recipe"][ores]:
+                        rprint(f"[red]You don't have enough {ores} to craft {item}[/red]")
+                        return craft()
+                except:
+                    rprint(f"[red]You don't have enough {ores} to craft {item}[/red]")
+                    return craft()
+            for ores in shopItems[item]["recipe"]:
+                userInventory[ores] -= shopItems[item]["recipe"][ores]
+            try:
+                for contents in shopItems[item]["contents"]:
+                    userInventory[contents] += shopItems[item]["contents"][contents]
+            except:
+                for contents in shopItems[item]["contents"]:
+                    userInventory[contents] = shopItems[item]["contents"][contents]
+            rprint(f"[green]You crafted a {item}![/green]")
+            return craft()
+    if userInput.lower() == "exit":
+        return main_menu()
 
 # Error handling
 if __name__ == "__main__":
@@ -385,3 +433,7 @@ if __name__ == "__main__":
         load_animation("Saving your data", 10)
         db.setdb(userInventory)
         sys.exit()
+
+
+# while True:
+#     main_menu()
