@@ -416,6 +416,8 @@ def craft():
 
         # Adds all the elements to shop table
         for item in shopItems:
+            if shopItems[item]["craftable"] == False:
+                continue
             try:
                 table.add_row(
                     f"""{item.title()}""", f"""{shopItems[item]["price"]}""")
