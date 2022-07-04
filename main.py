@@ -148,7 +148,7 @@ def mine():
         else:
             rprint(f"You were supposed to type {inputToType}")
 
-
+# Sell
 def sell():
     """
         Sell a certain amount of ores
@@ -216,7 +216,8 @@ def sell():
 
         # If ore is invalid
         elif userInput.lower() not in userInventory.keys():
-            return rprint(f"[red]{userInput} is not a valid ore[/red]")
+            rprint(f"[red]{userInput} is not a valid ore[/red]")
+            return sell()
 
         # If they don't have enough of an ore to sell
         elif userInventory[userInput.lower()] == 0:
@@ -225,6 +226,14 @@ def sell():
         # If they try to sell coins
         elif userInput.lower() == "coins":
             return rprint(f"[red]You can't sell coins[/red]")
+        
+        try:
+            if shopItems[userInput]["sellable"] == False:
+                rprint("[red]You can't sell that[/red]")
+                return sell()
+        except:
+            rprint("[red]You can't sell that[/red]")
+            return sell()
 
         ore_to_sell = userInput
 
@@ -263,8 +272,6 @@ def sell():
                 rprint(f"[orange] You sold {1} {ore}! [orange]")
 
 # Inventory
-
-
 def inventory():
     while True:
         # Inventory table
@@ -401,6 +408,22 @@ def craft():
         Lets you craft craftable items
     """
     while True:
+        # Shop table
+        table = Table(title="All Craftable Items")
+
+        table.add_column("Item", justify="right", style="green", no_wrap=True)
+        table.add_column("Price", justify="right", style="blue")
+
+        # Adds all the elements to shop table
+        for item in shopItems:
+            try:
+                table.add_row(
+                    f"""{item.title()}""", f"""{shopItems[item]["price"]}""")
+            except:
+                table.add_row(f"""{item}""", f"""Priceless""")
+
+        console.log(table)
+
         print("What would you like to craft(type exit to exit)?")
         userInput = input()
         if userInput.lower() == "exit":
@@ -431,17 +454,17 @@ def craft():
                 rprint(f"[red]{userInput} is not a craftable item[/red]")
                 return craft()
 
-# # Error handling
-# if __name__ == "__main__":
-#     try:
-#         while True:
-#             main_menu()
+# Error handling
+if __name__ == "__main__":
+    try:
+        while True:
+            main_menu()
 
-#     except:
-#         load_animation("Saving your data", 10)
-#         db.setdb(userInventory)
-#         sys.exit()
+    except:
+        load_animation("Saving your data", 10)
+        db.setdb(userInventory)
+        sys.exit()
 
 
-while True:
-    main_menu()
+# while True:
+#     main_menu()

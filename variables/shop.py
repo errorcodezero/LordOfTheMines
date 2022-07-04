@@ -4,6 +4,7 @@ shopItems = {
         "price": 10000,
         "description": "A lucky totem that will give you better luck. Allows you to possibly mine double ore.",
         "craftable": True,
+        "sellable": False,
         "recipe": {
             "diamond": 8,
             "platinum": 1,
@@ -17,6 +18,7 @@ shopItems = {
         "price": 1000000,
         "description": "A coin that is for only the richest. No real use but nice.",
         "craftable": False,
+        "sellable": True,
         "contents": {
             "collectors coin": 1
         }
@@ -26,6 +28,7 @@ shopItems = {
         "price": 5000,
         "description": "A crate that contains a starter pack of ores.",
         "craftable": False,
+        "sellable": True,
         "contents": {
             "stone": 100,
             "coal": 100,
@@ -39,6 +42,7 @@ shopItems = {
         "price": 30000,
         "description": "A crate that contains a pack of all the metals",
         "craftable": False,
+        "sellable": True,
         "contents": {
             "copper": 100,
             "iron": 100,
@@ -51,6 +55,7 @@ shopItems = {
         "price": 80000,
         "description": "A crate that contains a pack of all the gems",
         "craftable": False,
+        "sellable": True,
         "contents": {
             "amethyst": 100,
             "emerald": 100,
