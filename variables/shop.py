@@ -5,7 +5,7 @@ shopItems = {
         "description": "A lucky totem that will give you better luck. Allows you to possibly mine double ore.",
         "craftable": True,
         "recipe": {
-            "diamonds": 8,
+            "diamond": 8,
             "platinum": 1,
         },
         "contents": {

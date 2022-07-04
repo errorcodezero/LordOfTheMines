@@ -393,47 +393,55 @@ def info():
             rprint(f"[red]{userInput} is not a valid item[/red]")
             return info()
 
+# Craft
+
 
 def craft():
     """
-    Purpose: 
+        Lets you craft craftable items
     """
-    print("What would you like to craft(type exit to exit)?")
-    userInput = input()
-    for item in shopItems:
-        if userInput.lower() == item.lower():
-            for ores in shopItems[item]["recipe"]:
-                try:
-                    if userInventory[ores] < shopItems[item]["recipe"][ores]:
-                        rprint(f"[red]You don't have enough {ores} to craft {item}[/red]")
+    while True:
+        print("What would you like to craft(type exit to exit)?")
+        userInput = input()
+        if userInput.lower() == "exit":
+            return main_menu()
+        for item in shopItems:
+            if userInput.lower() == item.lower():
+                for ores in shopItems[item]["recipe"]:
+                    try:
+                        if userInventory[ores] < shopItems[item]["recipe"][ores]:
+                            rprint(
+                                f"[red]You don't have enough {ores} to craft {item}[/red]")
+                            return craft()
+                    except:
+                        rprint(
+                            f"[red]You don't have enough {ores} to craft {item}[/red]")
                         return craft()
+                for ores in shopItems[item]["recipe"]:
+                    userInventory[ores] -= shopItems[item]["recipe"][ores]
+                try:
+                    for contents in shopItems[item]["contents"]:
+                        userInventory[contents] += shopItems[item]["contents"][contents]
                 except:
-                    rprint(f"[red]You don't have enough {ores} to craft {item}[/red]")
-                    return craft()
-            for ores in shopItems[item]["recipe"]:
-                userInventory[ores] -= shopItems[item]["recipe"][ores]
-            try:
-                for contents in shopItems[item]["contents"]:
-                    userInventory[contents] += shopItems[item]["contents"][contents]
-            except:
-                for contents in shopItems[item]["contents"]:
-                    userInventory[contents] = shopItems[item]["contents"][contents]
-            rprint(f"[green]You crafted a {item}![/green]")
-            return craft()
-    if userInput.lower() == "exit":
-        return main_menu()
+                    for contents in shopItems[item]["contents"]:
+                        userInventory[contents] = shopItems[item]["contents"][contents]
+                rprint(f"[green]You crafted a {item}![/green]")
+                return craft()
+            else:
+                rprint(f"[red]{userInput} is not a craftable item[/red]")
+                return craft()
 
-# Error handling
-if __name__ == "__main__":
-    try:
-        while True:
-            main_menu()
+# # Error handling
+# if __name__ == "__main__":
+#     try:
+#         while True:
+#             main_menu()
 
-    except:
-        load_animation("Saving your data", 10)
-        db.setdb(userInventory)
-        sys.exit()
+#     except:
+#         load_animation("Saving your data", 10)
+#         db.setdb(userInventory)
+#         sys.exit()
 
 
-# while True:
-#     main_menu()
+while True:
+    main_menu()
