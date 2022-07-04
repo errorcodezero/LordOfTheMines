@@ -116,7 +116,18 @@ def mine():
                 userInventory[recieved_ore] += 1
             except:
                 userInventory[recieved_ore] = 1
-            print(f"""You got a {recieved_ore}""")
+
+            if ores[recieved_ore]["type"] == "legendary":
+                text = Colorate.Diagonal(Colors.rainbow, f"""You got a {recieved_ore}""", speed = randint(1, 3))
+                print(text)
+            elif "lucky totem" in userInventory and randint(1, 4) == 1:
+                rprint(f"[yellow]Your lucky totem made you lucky and you got 2 {recieved_ore}[/yellow]")
+                try:
+                    userInventory[recieved_ore] += 1
+                except:
+                    userInventory[recieved_ore] = 2
+            else:
+                print(f"You got a {recieved_ore}")
         # Exit
         elif userInput == "exit":
             console.clear()
