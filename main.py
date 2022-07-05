@@ -129,7 +129,7 @@ def mine():
 
             if ores[recieved_ore]["type"] == "legendary":
                 text = Colorate.Diagonal(
-                    Colors.rainbow, f"""You got a {recieved_ore}""", speed=randint(1, 3))
+                    Colors.rainbow, f"""You got a {recieved_ore}!!!""")
                 print(text)
                 return mine()
             # elif "lucky totem" in userInventory and randint(1, 4) == 1:
