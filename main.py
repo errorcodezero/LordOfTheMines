@@ -225,6 +225,7 @@ def sell():
                         userInventory[ore]
                     userInventory[ore] = 0
             rprint("[green]You sold all your ore[/green]")
+            rprint(f"""Coins: {userInventory["coins"]}""")
             rprint("Press enter to continue")
 
             input()
@@ -473,6 +474,7 @@ def craft():
             else:
                 continue
         rprint(f"[red]{userInput} is not a valid item[/red]")
+
 
 # Error handling
 if __name__ == "__main__":
