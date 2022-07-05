@@ -131,15 +131,29 @@ def mine():
                 text = Colorate.Diagonal(
                     Colors.rainbow, f"""You got a {recieved_ore}""", speed=randint(1, 3))
                 print(text)
-            elif "lucky totem" in userInventory and randint(1, 4) == 1:
-                rprint(
-                    f"[yellow]Your lucky totem made you lucky and you got 2 {recieved_ore}[/yellow]")
+                return mine()
+            # elif "lucky totem" in userInventory and randint(1, 4) == 1:
+            #     rprint(
+            #         f"[yellow]Your lucky totem made you lucky and you got 2 {recieved_ore}[/yellow]")
+            #     try:
+            #         userInventory[recieved_ore] += 1
+            #     except:
+            #         userInventory[recieved_ore] = 2
+            for item in userInventory:
                 try:
-                    userInventory[recieved_ore] += 1
+                    if shopItems[item]["item_type"] == "totem":
+                        if randint(1, shopItems[item]["totem_chance"]) == 1:
+                            rprint(
+                                f"""[yellow]Your [bold]{item}[/bold] made you lucky and you got {shopItems[item]["totem_multiply"]} {recieved_ore}s[/yellow]""")
+                            try:
+                                userInventory[recieved_ore] += userInventory[item]["totem_multiply"] + 1
+                                return mine()
+                            except:
+                                userInventory[recieved_ore] = userInventory[item]["totem_multiply"] + 1
+                                return mine()
                 except:
-                    userInventory[recieved_ore] = 2
-            else:
-                print(f"You got a {recieved_ore}")
+                    continue
+            print(f"You got a {recieved_ore}")
         # Exit
         elif userInput == "exit":
             console.clear()
@@ -149,6 +163,8 @@ def mine():
             rprint(f"You were supposed to type {inputToType}")
 
 # Sell
+
+
 def sell():
     """
         Sell a certain amount of ores
@@ -226,7 +242,7 @@ def sell():
         # If they try to sell coins
         elif userInput.lower() == "coins":
             return rprint(f"[red]You can't sell coins[/red]")
-        
+
         try:
             if shopItems[userInput]["sellable"] == False:
                 rprint("[red]You can't sell that[/red]")
@@ -272,6 +288,8 @@ def sell():
                 rprint(f"[orange] You sold {1} {ore}! [orange]")
 
 # Inventory
+
+
 def inventory():
     while True:
         # Inventory table
@@ -453,8 +471,8 @@ def craft():
                 rprint(f"[green]You crafted a {item}![/green]")
                 return craft()
             else:
-                rprint(f"[red]{userInput} is not a craftable item[/red]")
-                return craft()
+                continue
+        rprint(f"[red]{userInput} is not a valid item[/red]")
 
 # Error handling
 if __name__ == "__main__":
