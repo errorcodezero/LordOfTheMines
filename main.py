@@ -396,11 +396,6 @@ def info():
                     rprint(f"""Name: [green bold]{item}[/green bold]""")
                     rprint(
                         f"""Description: [green]{shopItems[item]["description"]}[/green]""")
-                    rprint("Contents:")
-                    for contents in shopItems[item]["contents"]:
-                        if len(contents):
-                            break
-                        rprint(f"""- [green]{contents}[/green]""")
                     rprint("[blue]Press enter to exit")
                     input()
                     return main_menu()
