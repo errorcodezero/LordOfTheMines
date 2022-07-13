@@ -52,6 +52,12 @@ class Database(object):
     
     def printdb(self):
         return self.db
+    
+    def check(self , key):
+        if not key in self.db:
+            return False
+        else:
+            return True
 
     def setdb(self , db):
         self.db = db

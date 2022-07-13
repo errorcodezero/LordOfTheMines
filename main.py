@@ -19,7 +19,7 @@ console.clear()
 obtainableOres = []
 
 # Json based database
-db = Database("database.json")
+db = Database("db.json")
 try:
     userInventory = db.printdb()
 except:
@@ -302,18 +302,21 @@ def inventory():
 
         # Adds all the elements to inventory table
         for ore in userInventory:
-            if ore == "coins":
+            try:
+                if ore == "coins":
+                    continue
+                elif userInventory[ore] <= 0:
+                    userInventory[ore] = 0
+                    continue
+                else:
+                    try:
+                        table.add_row(
+                            f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+                    except:
+                        table.add_row(
+                            f"""{ore}""", f"""{shopItems[ore]["price"]}""", f"""{userInventory[ore]}""")
+            except:
                 continue
-            elif userInventory[ore] <= 0:
-                userInventory[ore] = 0
-                continue
-            else:
-                try:
-                    table.add_row(
-                        f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
-                except:
-                    table.add_row(
-                        f"""{ore}""", f"""{shopItems[ore]["price"]}""", f"""{userInventory[ore]}""")
 
         # Prints the table
         console.print(table)
