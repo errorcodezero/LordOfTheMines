@@ -41,8 +41,15 @@ def setUserInv(username: str, value: str, amount: int):
 
 def saveDB():
     db.dumpdb()
+    
+@app.route("/", methods=["GET"])
+def main():
+    return {
+        "status": 200
+    }
 
-@app.route('/signup/<username>/<password>', methods=["POST"])
+
+@app.route('/signup/<username>/<password>', methods=["GET"])
 def login(username, password):
     if getUserInv(username) == False:
         db.set(f"{username}_inv", {})
@@ -54,21 +61,30 @@ def login(username, password):
         return {"message": "User already exists"}
 
 
-@app.route('/sell/<username>/<password>/<item>/<amount>', methods=["POST"])
+@app.route('/sell/<username>/<password>/<item>/<amount>', methods=["GET"])
 def sell(username, password, item, amount: int):
     if auth(username, password) == False:
         return "Authentication Failed"
-    setUserInv(username, item, getUserInv(username)[item] - amount)
+    else:
+        try:
+            if getUserInv(username)[item] >= int(amount) and int(amount) > 0:
+                setUserInv(username, item, getUserInv(username)[item] - int(amount))
+                setUserInv(username, "coins", getUserInv(username)["coins"] + int(amount) * shopItems[item]["price"])
+                return {"sold": True}
+            else:
+                return {"sold": False}
+        except:
+            return {"sold": False}
 
 
-@app.route('/shop/<username>/<password>', methods=["POST"])
+@app.route('/items/<username>/<password>', methods=["GET"])
 def shop(username, password):
     if auth(username, password) == False:
         return "Authentication Failed"
-    return {"items": shopItems}
+    return {"items": shopItems, "ores": ores}
 
 
-@app.route('/buy/<username>/<password>/<item>/<amount>', methods=["POST"])
+@app.route('/buy/<username>/<password>/<item>/<amount>', methods=["GET"])
 def buy(username, password, item, amount):
     if auth(username, password) == False:
         return "Authentication Failed"
@@ -84,7 +100,8 @@ def buy(username, password, item, amount):
                 "got_item": True
             }
 
-@app.route('/craft/<username>/<password>/<item>/<amount>', methods=["POST"])
+
+@app.route('/craft/<username>/<password>/<item>/<amount>', methods=["GET"])
 def craft(username, password, item, amount):
     if auth(username, password) == False:
         return "Authentication Failed"
@@ -178,7 +195,13 @@ def sync(username, password):
     if auth(username, password) == False:
         return {"message": "Authentication Failed"}
     userInventory = db.get(f"{username}_inv")
-    return {"userInventory": userInventory}
+    return {"user_inventory": userInventory}
+
+@app.route("/shop/<username>/<password>/", methods=["GET"])
+def shop(username, password):
+    if auth(username, password) == False:
+        return {"message": "Authentication Failed"}
+    return {"shop_items": shopItems}
 
 
 if __name__ == '__main__':
