@@ -77,7 +77,7 @@ def sell(username, password, item, amount: int):
             return {"sold": False}
 
 
-@app.route('/items/<username>/<password>', methods=["GET"])
+@app.route('/shop/<username>/<password>', methods=["GET"])
 def shop(username, password):
     if auth(username, password) == False:
         return "Authentication Failed"
@@ -196,13 +196,6 @@ def sync(username, password):
         return {"message": "Authentication Failed"}
     userInventory = db.get(f"{username}_inv")
     return {"user_inventory": userInventory}
-
-@app.route("/shop/<username>/<password>/", methods=["GET"])
-def shop(username, password):
-    if auth(username, password) == False:
-        return {"message": "Authentication Failed"}
-    return {"shop_items": shopItems}
-
 
 if __name__ == '__main__':
     app.run()

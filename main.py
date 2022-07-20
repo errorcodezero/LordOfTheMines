@@ -159,7 +159,6 @@ def sell(url, username, password):
         table = Table(title="Inventory")
 
         table.add_column("Ore", justify="right", style="green", no_wrap=True)
-        table.add_column("Price", justify="right", style="blue")
         table.add_column("Amount", justify="right", style="magenta")
         
         request = requests.get(url + f"/sync/{username}/{password}")
@@ -183,10 +182,76 @@ def sell(url, username, password):
             else:
                 try:
                     table.add_row(
-                        f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+                        f"""{ore}""", f"""{userInventory[ore]}""")
                 except:
                     table.add_row(
-                        f"""{ore}""", f"""{shopItems[ore]["price"]}""", f"""{userInventory[ore]}""")
+                        f"""{ore}""", f"""{userInventory[ore]}""")
+                    
+        console.log(table)
+        
+        rprint("[magenta]What ore would you like to sell?(type exit to exit and sellall to sell all your ores)[/magenta]")
+        userInput = input()
+        if userInput == "exit":
+            console.clear()
+            return main_menu(url, username, password)
+
+        request = requests.get(url + f"/shop/{username}/{password}")
+        try:
+            shopItems = json.loads(request.text)["items"]
+        except:
+            rprint("[red]Error: Could not connect to server[/red]")
+            rprint("[red]Press enter to exit[/red]")
+            input()
+            return main_menu(url, username, password)
+        for item in shopItems:
+            if item.lower() == "exit":
+                return main_menu(url, username, password)
+            
+            elif item.lower() == userInput.lower():
+                rprint(f"[green]How many {item} would you like to sell?[/green]")
+                userInput = input()
+                if userInput == "exit":
+                    return main_menu(url, username, password)
+                try:
+                    amount = int(userInput)
+                    if amount <= 0:
+                        rprint("[red]You can't sell 0 or less[/red]")
+                        rprint("[red]Press enter to exit[/red]")
+                        input()
+                        return main_menu(url, username, password)
+                    elif amount >= userInventory[item]:
+                        rprint(f"[red]You don't have that many {item}[/red]")
+                        rprint("[red]Press enter to exit[/red]")
+                        input()
+                        return main_menu(url, username, password)
+                    else:
+                        request = requests.get(url + f"/sell/{username}/{password}/{item}/{amount}")
+                        try:
+                            jsonRequest = json.loads(request.text)
+                        except:
+                            rprint("There was an error selling the ore")
+                except:
+                    rprint("[red]Invalid input[/red]")
+                    break
+                if amount > userInventory[item]:
+                    rprint("[red]You don't have that many[/red]")
+                    break
+                else:
+                    request = requests.get(url + f"/sell/{username}/{password}/{item}/{amount}")
+                    try:
+                        jsonRequest = json.loads(request.text)
+                        if jsonRequest["amount"] == 0:
+                            rprint("[red]You sold nothing[/red]")
+                        else:
+                            rprint(f"""[green]You sold {jsonRequest["amount"]} {item}[/green]""")
+                    except:
+                        rprint("[red]Error: Could not connect to server[/red]")
+                        rprint("[red]Press enter to exit[/red]")
+                        input()
+                        return main_menu(url, username, password)
+            else:
+                rprint("[red]Invalid input[/red]")
+                return sell(url, username, password)
         # Prints the table
         console.print(table)
 
@@ -196,122 +261,6 @@ def sell(url, username, password):
         except:
             userInventory["coins"] = 0
             rprint(f"""Coins: 0""")
-
-        # Asks what to sell
-        rprint("[magenta]What ore would you like to sell?[/magenta](type exit to exit and type sellall to sell everything)")
-
-        # Gets user input
-        userInput = input()
-
-        # If user wants to exit
-        if userInput == "exit":
-            console.clear()
-            return main_menu(url, username, password)
-
-        # If user wants to sell everything
-        elif userInput == "sellall":
-            console.clear()
-            for ore in userInventory:
-                if ore == "coins":
-                    continue
-                elif ore in shopItems:
-                    continue
-                else:
-                    request = requests.get(url + f"/sell/{username}/{password}/{ore}/{userInventory[ore]}")
-                    userInventory[ore] = 0
-            request = requests.get(url + f"/sync/{username}/{password}")
-            try:
-                jsonRequest = json.loads(request.text)
-                userInventory = jsonRequest["user_inventory"]
-                rprint("[green]You sold all your ore[/green]")
-                try:
-                    rprint(f"""Coins: {userInventory["coins"]}""")
-                except:
-                    rprint(f"""Coins: kdk""")
-                rprint("Press enter to continue")
-            except:
-                rprint("[red]Error: Could not connect to server[/red]")
-                rprint("[red]Press enter to exit[/red]")
-                input()
-                return main_menu(url, username, password)
-
-            input()
-            return main_menu(url, username, password)
-
-        # If ore is invalid
-        elif userInput.lower() not in userInventory.keys():
-            rprint(f"[red]{userInput} is not a valid ore[/red]")
-            return sell()
-
-        # If they don't have enough of an ore to sell
-        elif userInventory[userInput.lower()] == 0:
-            return rprint(f"""[red]You don't enough {userInput.lower()} to sell[/red]""")
-
-        # If they try to sell coins
-        elif userInput.lower() == "coins":
-            return rprint(f"[red]You can't sell coins[/red]")
-
-        request = requests.get(url + f"/shop/{username}/{password}")
-        
-        try:
-            jsonRequest = json.loads(request.text)
-            shopItems = jsonRequest["shop"]
-            for item in shopItems:
-                if item == "coins":
-                    continue
-                elif userInput.lower() == item.lower():
-                    continue
-                else:
-                    shopItems[item]["price"] = 0
-            
-        except:
-            rprint("[red]Error: Could not connect to server[/red]")
-            rprint("[red]Press enter to exit[/red]")
-            input()
-            return main_menu(url, username, password)
-        
-        try:
-            if shopItems[userInput]["sellable"] == False:
-                rprint("[red]You can't sell that[/red]")
-                return sell()
-        except:
-            rprint("[red]You can't sell that[/red]")
-            return sell()
-
-        ore_to_sell = userInput
-
-        # How much does user want to sell
-        rprint(
-            f"[magenta]How many {ore_to_sell} would you like to sell(type exit to exit)?[/magenta]")
-        userInput = input()
-
-        # Again they can type exit
-        if(userInput == "exit"):
-            return main_menu(url, username, password)
-
-        try:
-            userInput = int(userInput)
-        except:
-            return rprint(f"[red]{userInput} is not a valid number[/red]")
-
-        # If they don't have enough of an ore to sell
-        if userInput > userInventory[ore_to_sell]:
-            return rprint(f"[red]You don't have enough {ore_to_sell} to sell[/red]")
-
-        # To prevent them from selling negative amounts
-        elif userInput < 0:
-            return rprint(f"[red]You can't sell negative amounts of ore[/red]")
-
-        # Actually selling the ore
-        request = requests.get(url + f"/sell/{username}/{password}/{ore_to_sell}/{userInput}")
-
-        rprint(f"[green]You sold {userInput} {ore_to_sell}[/green]")
-
-        for ore in userInventory:
-            if userInput == ore.lower():
-                userInventory[ore] -= 1
-                userInventory["coins"] += 1
-                rprint(f"[orange] You sold {1} {ore}! [orange]")
 
 # Inventory
 def inventory(url, username, password):
@@ -333,7 +282,7 @@ def inventory(url, username, password):
             input()
             return main_menu(url, username, password)
 
-        userInventory = jsonRequest["userInventory"]        
+        userInventory = jsonRequest["user_inventory"]        
         
         # Adds all the elements to inventory table
         for ore in userInventory:
