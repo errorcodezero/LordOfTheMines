@@ -69,7 +69,10 @@ def sell(username, password, item, amount: int):
         try:
             if getUserInv(username)[item] >= int(amount) and int(amount) > 0:
                 setUserInv(username, item, getUserInv(username)[item] - int(amount))
-                setUserInv(username, "coins", getUserInv(username)["coins"] + int(amount) * shopItems[item]["price"])
+                try:
+                    setUserInv(username, "coins", getUserInv(username)["coins"] + int(amount) * shopItems[item]["price"])
+                except:
+                    setUserInv(username, "coins", int(amount) * shopItems[item]["price"])
                 return {"sold": True}
             else:
                 return {"sold": False}
@@ -99,6 +102,12 @@ def buy(username, password, item, amount):
             return {
                 "got_item": True
             }
+            
+@app.route('/ores/<username>/<password>', methods=["GET"])
+def ores(username, password):
+    if auth(username, password) == False:
+        return "Authentication Failed"
+    return {"ores": ores}
 
 
 @app.route('/craft/<username>/<password>/<item>/<amount>', methods=["GET"])
