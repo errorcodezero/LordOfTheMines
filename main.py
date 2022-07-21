@@ -57,14 +57,42 @@ def get_server():
                 password = input("Password: ")
                 request = requests.get(url + f"/signup/{username}/{password}")
                 request = requests.get(url + f"/ores/{username}/{password}")
-                ores = json.loads(request.text)
+                try:
+                    ores = json.loads(request.text)["ores"]
+                except:
+                    rprint("[red]Error: Could not connect to server[/red]")
+                    rprint("[red]Press enter to exit[/red]")
+                    input()
+                    sys.exit()
                 request = requests.get(url + f"/shop/{username}/{password}")
-                shopItems = json.loads(request.text)
+                try:
+                    shopItems = json.loads(request.text)["shop_items"]
+                except:
+                    rprint("[red]Error: Could not connect to server[/red]")
+                    rprint("[red]Press enter to exit[/red]")
+                    input()
+                    sys.exit()
                 return main_menu(url, username, password, ores, shopItems)
             elif userInput == "n":
                 username = input("Username: ")
                 password = input("Password: ")
-                return main_menu(url, username, password)
+                request = requests.get(url + f"/ores/{username}/{password}")
+                try:
+                    ores = json.loads(request.text)["ores"]
+                except:
+                    rprint("[red]Error: Could not connect to server[/red]")
+                    rprint("[red]Press enter to exit[/red]")
+                    input()
+                    sys.exit()
+                request =  requests.get(url + f"/shop/{username}/{password}")
+                try:
+                    shopItems = json.loads(request.text)["items"]
+                except:
+                    rprint("[red]Error: Could not connect to server[/red]")
+                    rprint("[red]Press enter to exit[/red]")
+                    input()
+                    sys.exit()
+                return main_menu(url, username, password, ores, shopItems)
 
 
 def main_menu(url, username, password, ores, shopItems):
@@ -122,7 +150,7 @@ def main_menu(url, username, password, ores, shopItems):
     # Invalid input
     else:
         rprint("[red]Invalid input[/red]")
-        main_menu(url, username, password)
+        main_menu(url, username, password, ores, shopItems)
 
 # Mine
 
@@ -152,7 +180,7 @@ def mine(url, username, password, ores, shopItems):
         # Exit
         elif userInput == "exit":
             console.clear()
-            return main_menu(url, username, password)
+            return main_menu(url, username, password, ores, shopItems)
         # If user doesn't type specified number
         else:
             rprint(f"You were supposed to type {inputToType}")
@@ -180,7 +208,7 @@ def sell(url, username, password, ores, shopItems):
             rprint("[red]Error: Could not connect to server[/red]")
             rprint("[red]Press enter to exit[/red]")
             input()
-            return main_menu(url, username, password)
+            return main_menu(url, username, password, ores, shopItems)
 
         # Adds all the elements to inventory table
         for ore in userInventory:
@@ -228,7 +256,7 @@ def sell(url, username, password, ores, shopItems):
             rprint("Press enter to continue")
 
             input()
-            return main_menu(url, username, password)
+            return main_menu(url, username, password, ores, shopItems)
 
         # If ore is invalid
         elif userInput.lower() not in userInventory.keys():
@@ -246,7 +274,7 @@ def sell(url, username, password, ores, shopItems):
         try:
             if shopItems[userInput]["sellable"] == False:
                 rprint("[red]You can't sell that[/red]")
-                return sell(url, username, password)
+                return sell(url, username, password, ores, shopItems)
         except:
             pass
         
@@ -259,7 +287,7 @@ def sell(url, username, password, ores, shopItems):
 
         # Again they can type exit
         if(userInput == "exit"):
-            return main_menu()
+            return main_menu(url, username, password, ores, shopItems)
 
         try:
             userInput = int(userInput)
@@ -284,8 +312,7 @@ def inventory(url, username, password, ores, shopItems):
         table = Table(title="Inventory")
 
         table.add_column("Ore", justify="right", style="green", no_wrap=True)
-        table.add_column("Price", justify="right", style="blue")
-        table.add_column("Amount", justify="right", style="magenta")
+        table.add_column("Quantity", justify="right", style="magenta")
 
         request = requests.get(url + f"/sync/{username}/{password}")
         try:
@@ -295,23 +322,22 @@ def inventory(url, username, password, ores, shopItems):
             rprint("[red]Press enter to exit[/red]")
             jsonRequest = {}
             input()
-            return main_menu(url, username, password)
+            return main_menu(url, username, password, ores, shopItems)
 
         # Adds all the elements to inventory table
         for ore in userInventory:
             try:
                 if ore == "coins":
                     continue
-                elif userInventory[ore] <= 0:
-                    userInventory[ore] = 0
+                elif userInventory[ore] == 0:
                     continue
                 else:
                     try:
                         table.add_row(
-                            f"""{ore}""", f"""{ores[ore]["price"]}""", f"""{userInventory[ore]}""")
+                            f"""{ore}""", f"""{userInventory[ore]}""")
                     except:
                         table.add_row(
-                            f"""{ore}""", f"""{shopItems[ore]["price"]}""", f"""{userInventory[ore]}""")
+                            f"""{ore}""", f"""{userInventory[ore]}""")
             except:
                 continue
 
@@ -325,7 +351,7 @@ def inventory(url, username, password, ores, shopItems):
             rprint(f"""Coins: 0""")
         rprint("Press enter to continue")
         input()
-        return main_menu(url, username, password)
+        return main_menu(url, username, password, ores, shopItems)
 
 
 def shop(url, username, password, ores, shopItems):
@@ -347,7 +373,7 @@ def shop(url, username, password, ores, shopItems):
         rprint("[red]Error: Could not connect to server[/red]")
         rprint("[red]Press enter to exit[/red]")
         input()
-        return main_menu(url, username, password)
+        return main_menu(url, username, password, ores, shopItems)
 
     # Adds all the elements to shop table
     for item in shopItems:
@@ -385,7 +411,7 @@ def shop(url, username, password, ores, shopItems):
             return shop()
     # Exit
     if userInput.lower() == "exit":
-        return main_menu(url, username, password)
+        return main_menu(url, username, password, ores, shopItems)
 
 # Info
 
@@ -407,7 +433,7 @@ def info(url, username, password, ores, shopItems):
                         f"""Description: [green]{shopItems[item]["description"]}[/green]""")
                     rprint("[blue]Press enter to exit")
                     input()
-                    return main_menu(url, username, password)
+                    return main_menu(url, username, password, ores, shopItems)
 
             for ore in ores:
                 if userInput.lower() == ore.lower():
@@ -415,7 +441,7 @@ def info(url, username, password, ores, shopItems):
                     rprint(f"""Price: [green]{ores[ore]["price"]}[/green]""")
                     rprint("[blue]Press enter to exit")
                     input()
-                    return main_menu(url, username, password)
+                    return main_menu(url, username, password, ores, shopItems)
                 else:
                     rprint(f"[red]{userInput} is not a valid item[/red]")
                     return info()
@@ -423,16 +449,16 @@ def info(url, username, password, ores, shopItems):
             rprint(f"[red]{userInput} is not a valid item[/red]")
             return info()
 
-# # Error handling
-# if __name__ == "__main__":
-#     try:
-#         while True:
-#             get_server()
+# Error handling
+if __name__ == "__main__":
+    try:
+        while True:
+            get_server()
 
-#     except:
-#         load_animation("Saving your data", 10)
-#         sys.exit()
+    except:
+        load_animation("Exitting", 10)
+        sys.exit()
 
 
-while True:
-    get_server()
+# while True:
+#     get_server()

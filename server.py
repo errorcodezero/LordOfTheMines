@@ -104,11 +104,24 @@ def buy(username, password, item, amount):
             }
             
 @app.route('/ores/<username>/<password>', methods=["GET"])
-def ores(username, password):
+def ore(username, password):
     if auth(username, password) == False:
         return "Authentication Failed"
     return {"ores": ores}
 
+@app.route('/sellall/<username>/<password>', methods=["GET"])
+def ore(username, password):
+    if auth(username, password) == False:
+        return "Authentication Failed"
+    for item in getUserInv(username):
+        if item == "coins":
+            continue
+        else:
+            try:
+                if shopItems[item]:
+                    continue
+            except:
+                continue
 
 @app.route('/craft/<username>/<password>/<item>/<amount>', methods=["GET"])
 def craft(username, password, item, amount):
