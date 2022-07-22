@@ -80,8 +80,8 @@ def sell(username, password, item, amount: int):
             return {"sold": False}
 
 
-@app.route('/shop/<username>/<password>', methods=["GET"])
-def shop(username, password):
+@app.route('/items/<username>/<password>', methods=["GET"])
+def items(username, password):
     if auth(username, password) == False:
         return "Authentication Failed"
     return {"items": shopItems, "ores": ores}
@@ -103,11 +103,6 @@ def buy(username, password, item, amount):
                 "got_item": True
             }
             
-@app.route('/ores/<username>/<password>', methods=["GET"])
-def ore(username, password):
-    if auth(username, password) == False:
-        return "Authentication Failed"
-    return {"ores": ores}
 
 @app.route('/sellall/<username>/<password>', methods=["GET"])
 def ore(username, password):
