@@ -12,7 +12,7 @@ beautifulsoup4==4.11.1
 bleach==5.0.0
 bottle==0.12.21
 bottle-websocket==0.2.9
-certifi==2022.6.15
+certifi==2022.12.7
 cffi==1.15.0
 charset-normalizer==2.0.12
 click==8.1.3
